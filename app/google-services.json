@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "319201863709",
+    "firebase_url": "https://bloodmateapp-6e39f.firebaseio.com",
+    "project_id": "bloodmateapp-6e39f",
+    "storage_bucket": "bloodmateapp-6e39f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319201863709:android:e05a7b68ad801d2aa5bef4",
+        "android_client_info": {
+          "package_name": "com.example.bloodmateapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319201863709-g7s1o5evupp0opndhm6dnk1lc1pe5bus.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bloodmateapp",
+            "certificate_hash": "dc731b8b772748edbda7aa0e871dc33855e672bb"
+          }
+        },
+        {
+          "client_id": "319201863709-p8ktndidbkm6di4qfemqjkaas5t0v8oe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bloodmateapp",
+            "certificate_hash": "61b14c520695e2a2746f74340b6e31a5b87475f3"
+          }
+        },
+        {
+          "client_id": "319201863709-85palag21oqek5gkvmff0rh9cqqsmn8e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOmw6ziPG1VAK_V_qhXeYY7fL08XCpJ5k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319201863709-85palag21oqek5gkvmff0rh9cqqsmn8e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
