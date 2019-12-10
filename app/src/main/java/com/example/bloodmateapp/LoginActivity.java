@@ -3,11 +3,9 @@ package com.example.bloodmateapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private TextView signupLink;
     private FirebaseAuth mAuth;
-    private Intent MainPageActivity;
+    private Intent MainActivity;
 
 
     @Override
@@ -41,8 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.input_password);
         loginButton = findViewById(R.id.btn_login);
         signupLink = findViewById(R.id.link_signup);
-        mAuth = FirebaseAuth.getInstance();
-        MainPageActivity = new Intent(this, com.example.bloodmateapp.MainPageActivity.class);
+        MainActivity = new Intent(this, com.example.bloodmateapp.MainActivity.class);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -81,12 +78,13 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
 
 
+
+
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
@@ -126,7 +124,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess() {
-        startActivity(MainPageActivity);
+        Toast.makeText(LoginActivity.this, "You Are Logged In successfully.", Toast.LENGTH_SHORT).show();
+        startActivity(MainActivity);
         finish();
     }
 
@@ -159,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 
- /*   @Override
+    @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -170,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-  */
+
 }
 
 
