@@ -3,6 +3,8 @@ package com.example.bloodmateapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,74 +27,150 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private TextView signupLink;
     private FirebaseAuth mAuth;
+    private Intent MainPageActivity;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
 
-        emailText = (EditText) findViewById(R.id.input_email);
-        passwordText = (EditText) findViewById(R.id.input_password);
-        loginButton = (Button) findViewById(R.id.btn_login);
-        signupLink = (TextView) findViewById(R.id.link_signup);
+        emailText = findViewById(R.id.input_email);
+        passwordText = findViewById(R.id.input_password);
+        loginButton = findViewById(R.id.btn_login);
+        signupLink = findViewById(R.id.link_signup);
+        mAuth = FirebaseAuth.getInstance();
+        MainPageActivity = new Intent(this, com.example.bloodmateapp.MainPageActivity.class);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view)
-            {
-                AllowingUserToLogin();
+            public void onClick(View v) {
+                login();
+            }
+        });
+
+        signupLink.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Start the Signup activity
+                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
     }
 
-    private void AllowingUserToLogin()
-    {
+    public void login() {
+
+        if (!validate()) {
+            onLoginFailed();
+            return;
+        }
+
+        loginButton.setEnabled(false);
+
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
+
+
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        if(TextUtils.isEmpty(email))
-        {
-            Toast.makeText(this, "Please write your email...", Toast.LENGTH_SHORT).show();
-        }
-        else if(TextUtils.isEmpty(password))
-        {
-            Toast.makeText(this, "Please write your password...", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task)
+        // TODO: Implement your own authentication logic here.
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful())
                         {
-                            if(task.isSuccessful())
-                            {
-                                SendUserToMainActivity();
+                            loginButton.setEnabled(true);
+                            Toast.makeText(LoginActivity.this, "You Are Logged In successfully.", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                            onLoginSuccess();
 
-                                Toast.makeText(LoginActivity.this, "you are Logged In successfully.", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                String message = task.getException().getMessage();
-                                Toast.makeText(LoginActivity.this, "Error occured: " + message, Toast.LENGTH_SHORT).show();
-                            }
+                         }
+                        else
+                        {
+                            progressDialog.dismiss();
+                            onLoginFailed();
                         }
-                    });
-        }
+                    }
+                });
     }
 
-    private void SendUserToMainActivity()
-    {
-        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(mainIntent);
+
+/*    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_SIGNUP) {
+            if (resultCode == RESULT_OK) {
+
+                // TODO: Implement successful signup logic here
+                // By default we just finish the Activity and log them in automatically
+                this.finish();
+            }
+        }
+    } */
+
+    @Override
+    public void onBackPressed() {
+        // Disable going back to the MainActivity
+        moveTaskToBack(true);
+    }
+
+    public void onLoginSuccess() {
+        startActivity(MainPageActivity);
         finish();
     }
 
+    public void onLoginFailed() {
+        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
 
+        loginButton.setEnabled(true);
+    }
 
+    public boolean validate() {
+        boolean valid = true;
+
+        String email = emailText.getText().toString();
+        String password = passwordText.getText().toString();
+
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            emailText.setError("enter a valid email address");
+            valid = false;
+        } else {
+            emailText.setError(null);
+        }
+
+        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
+            passwordText.setError("between 4 and 10 alphanumeric characters");
+            valid = false;
+        } else {
+            passwordText.setError(null);
+        }
+
+        return valid;
+    }
+
+ /*   @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if( user != null ) {
+            onLoginSuccess();
+
+        }
+    }
+
+  */
 }
+
 
