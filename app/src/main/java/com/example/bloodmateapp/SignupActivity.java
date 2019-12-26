@@ -19,6 +19,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -48,7 +52,7 @@ public class SignupActivity extends AppCompatActivity {
         passwordconfirmText = findViewById(R.id.input_reEnterPassword);
         signupButton = findViewById(R.id.btn_signup);
         loginLink = findViewById(R.id.link_login);
-        MainActivity = new Intent(this, com.example.bloodmateapp.MainActivity.class);
+        MainActivity = new Intent(this, MainActivity.class);
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +102,28 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            String email = user.getEmail();
+                            String uid = user.getUid();
+                            String name = nameText.getText().toString();
+                            String adress = addressText.getText().toString();
+                            String mobilenumber = mobilenumberText.getText().toString();
+
+
+                            HashMap<Object, String> hashMap = new HashMap<>();
+
+                            hashMap.put("email", email);
+                            hashMap.put("uid", uid);
+                            hashMap.put("name",name);
+                            hashMap.put("address",adress);
+                            hashMap.put("bloodtype","");
+                            hashMap.put("mobilenumber",mobilenumber);
+
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference reference = database.getReference("Users");
+                            reference.child(uid).setValue(hashMap);
                             // Sign in success, update UI with the signed-in user's information
                             onSignupSuccess();
                         } else {

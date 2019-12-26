@@ -7,14 +7,14 @@
     tools:context=".PostRowActivity">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/bloodtype"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/radius"
         android:gravity="center"
-        android:text="TextView"
+        android:text="ab+"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:gravity="center"
         android:text="Name Surname"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintStart_toEndOf="@+id/bloodtype"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -43,7 +43,7 @@
         android:text="Location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.553"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintStart_toEndOf="@+id/bloodtype"
         app:layout_constraintTop_toBottomOf="@+id/namesurname" />
 
     <TextView
@@ -57,7 +57,7 @@
         android:text="time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.553"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintStart_toEndOf="@+id/bloodtype"
         app:layout_constraintTop_toBottomOf="@+id/location" />
 
     <TextView
@@ -71,6 +71,6 @@
         android:text="afgsdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/bloodtype" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
