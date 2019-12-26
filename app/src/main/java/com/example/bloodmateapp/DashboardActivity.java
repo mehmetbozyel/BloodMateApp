@@ -1,6 +1,7 @@
 package com.example.bloodmateapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -14,8 +15,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
 
-
-
+    ActionBar actionBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
