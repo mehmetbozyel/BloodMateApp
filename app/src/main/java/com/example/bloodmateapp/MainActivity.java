@@ -30,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
 
-        /*AnnouncementFragment announcementFragment = new AnnouncementFragment();
-        FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
-        ft2.add(R.id.context, announcementFragment, "");
-        Log.d("Bloodmate", "Announcement Selected");
-        ft2.commit();
-*/
+        HomeFragment homeFragment = new HomeFragment();
+        FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+        ft1.replace(R.id.context, homeFragment, "");
+        Log.d("Bloodmate", "Home Selected");
+        ft1.commit();
+
 
     }
 

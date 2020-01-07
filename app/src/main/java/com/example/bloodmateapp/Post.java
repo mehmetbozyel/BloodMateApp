@@ -1,50 +1,19 @@
 package com.example.bloodmateapp;
 
 public class Post {
-    private String bloodtype;
-    private String name;
-    private String location;
-    private String time;
+    public String name;
+    public String bloodtype;
+    public String city;
+    public String hospital;
+    public String details;
+    public String time;
 
-    public String getBloodtype() {
-        return bloodtype;
-    }
-
-    public void setBloodtype(String bloodtype) {
-        this.bloodtype = bloodtype;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Post(String name, String bloodtype, String city, String hospital, String details, String time) {
         this.name = name;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
+        this.bloodtype = bloodtype;
+        this.city = city;
+        this.hospital = hospital;
+        this.details = details;
         this.time = time;
     }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    private String details;
 }
