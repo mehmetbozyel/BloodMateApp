@@ -1,16 +1,13 @@
 package com.example.bloodmateapp;
 
 
-import android.app.ActionBar;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +18,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,8 +29,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 
 /**
@@ -53,6 +57,11 @@ public class AnnouncementFragment extends Fragment {
     Spinner bloodTypeSpinner;
     Spinner citiesSpinner;
     Spinner hospitalsSpinner;
+    String time;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    FirebaseUser firebaseUser;
+    String userValue,phoneValue;
 
 
 
@@ -68,11 +77,37 @@ public class AnnouncementFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_announcement, container, false);
 
         nametxt = view.findViewById(R.id.nameSurname);
-        detailstxt = view.findViewById(R.id.details);
+        detailstxt = view.findViewById(R.id.txt);
         announcebtn = view.findViewById(R.id.announce);
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Users");
+
+
+        Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    phoneValue = "" + ds.child("mobilenumber").getValue();
+                    userValue = "" + ds.child("name").getValue();
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
 
         bloodTypeSpinner = (Spinner) view.findViewById(R.id.bloodType);
@@ -99,7 +134,7 @@ public class AnnouncementFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("Select Blood Type")){
-                    Toast.makeText(parent.getContext(),"Please select blood type",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(parent.getContext(),"Please select blood type", LENGTH_SHORT).show();
                 }
                 else {
                     bloodItem = parent.getItemAtPosition(position).toString();
@@ -108,7 +143,7 @@ public class AnnouncementFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(parent.getContext(),"Any blood type is not selected",Toast.LENGTH_SHORT).show();
+                Toast.makeText(parent.getContext(),"Any blood type is not selected", LENGTH_SHORT).show();
             }
         });
 
@@ -116,7 +151,7 @@ public class AnnouncementFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("Select City")){
-                    Toast.makeText(parent.getContext(),"Please select a city",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(parent.getContext(),"Please select a city", LENGTH_SHORT).show();
                 }
                 else {
                     cityItem = parent.getItemAtPosition(position).toString();
@@ -125,7 +160,7 @@ public class AnnouncementFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(parent.getContext(),"Any city is not selected",Toast.LENGTH_SHORT).show();
+                Toast.makeText(parent.getContext(),"Any city is not selected", LENGTH_SHORT).show();
             }
         });
 
@@ -133,7 +168,7 @@ public class AnnouncementFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("Select Hospital Name")){
-                    Toast.makeText(parent.getContext(),"Please select a hospital",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(parent.getContext(),"Please select a hospital", LENGTH_SHORT).show();
                 }
                 else {
                     hospitalItem = parent.getItemAtPosition(position).toString();
@@ -142,7 +177,7 @@ public class AnnouncementFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(parent.getContext(),"Any hospital is not selected",Toast.LENGTH_SHORT).show();
+                Toast.makeText(parent.getContext(),"Any hospital is not selected", LENGTH_SHORT).show();
             }
         });
 
@@ -155,6 +190,11 @@ public class AnnouncementFragment extends Fragment {
                 uid = user.getUid();
                 name = nametxt.getText().toString();
                 details = detailstxt.getText().toString();
+                time = String.valueOf(System.currentTimeMillis());
+                Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                calendar.setTimeInMillis(Long.parseLong(time));
+                String date = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
+
 
 
 
@@ -174,15 +214,32 @@ public class AnnouncementFragment extends Fragment {
                 Log.d("Bloddmate", "database");
 */
 
-                final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference ref = database.getReference("posts");
-                DatabaseReference usersRef = ref.child("post");
-                HashMap<String, Post> postHashMap = new HashMap<>();
+                HashMap<Object, String> postHashMap = new HashMap<>();
+                //postHashMap.put(name, new Post(name,bloodItem,cityItem,hospitalItem,details,"5 ocak"));
+                /*postHashMap.put("NameSurname",name);
+                postHashMap.put("BloodType", bloodItem);
+                postHashMap.put("City", cityItem);
+                postHashMap.put("Hospital", hospitalItem);
+                postHashMap.put("Details", details);
+                postHashMap.put("Date", date);*/
 
-                postHashMap.put(name + " " + "5 ocak", new Post(name,bloodItem,cityItem,hospitalItem,details,"5 ocak"));
+                DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("Posts");
+                dbref.child(time).setValue(new Post(name,bloodItem,cityItem,hospitalItem,details,date,phoneValue,userValue))
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
 
-                usersRef.setValue(postHashMap);
-
+                                //Toast toast = Toast.makeText(AnnouncementFragment.this,"Post Published", LENGTH_SHORT);
+                                nametxt.setText("");
+                                detailstxt.setText("");
+                            }
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                //Toast.makeText(AnnouncementFragment.this,"Post Published", LENGTH_SHORT).show();
+                            }
+                        });
                 
                 HomeFragment homeFragment = new HomeFragment();
                 FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();

@@ -9,8 +9,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 public class SignupActivity extends AppCompatActivity {
 
     private EditText nameText;
@@ -36,6 +41,10 @@ public class SignupActivity extends AppCompatActivity {
     private TextView loginLink;
     private FirebaseAuth mAuth;
     private Intent MainActivity;
+    Spinner bloodTypeSpinner;
+    String bloodItem;
+    Spinner addressSpinner;
+    String addressItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +54,6 @@ public class SignupActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         nameText = findViewById(R.id.input_name);
-        addressText = findViewById(R.id.input_address);
         emailText = findViewById(R.id.input_email);
         mobilenumberText = findViewById(R.id.input_mobile);
         passwordText = findViewById(R.id.input_password);
@@ -53,7 +61,54 @@ public class SignupActivity extends AppCompatActivity {
         signupButton = findViewById(R.id.btn_signup);
         loginLink = findViewById(R.id.link_login);
         MainActivity = new Intent(this, MainActivity.class);
+        bloodTypeSpinner = (Spinner) findViewById(R.id.bloodType);
+        addressSpinner = (Spinner) findViewById(R.id.input_address);
 
+        ArrayAdapter<String> bloodTypeAdapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.bloodTypeList));
+        bloodTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        bloodTypeSpinner.setAdapter(bloodTypeAdapter);
+        ;
+
+        ArrayAdapter<String> citiesAdapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.cityList));
+        citiesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        addressSpinner.setAdapter(citiesAdapter);
+
+        bloodTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent.getItemAtPosition(position).equals("Select Blood Type")){
+                    Toast.makeText(parent.getContext(),"Please select blood type", LENGTH_SHORT).show();
+                }
+                else {
+                    bloodItem = parent.getItemAtPosition(position).toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(parent.getContext(),"Any blood type is not selected", LENGTH_SHORT).show();
+            }
+        });
+
+        System.out.println(bloodItem);
+        addressSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent.getItemAtPosition(position).equals("Select City")){
+                    Toast.makeText(parent.getContext(),"Please select a city", LENGTH_SHORT).show();
+                }
+                else {
+                    addressItem = parent.getItemAtPosition(position).toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(parent.getContext(),"Any city is not selected", LENGTH_SHORT).show();
+            }
+        });
+
+        System.out.println(addressItem);
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,17 +163,17 @@ public class SignupActivity extends AppCompatActivity {
                             String email = user.getEmail();
                             String uid = user.getUid();
                             String name = nameText.getText().toString();
-                            String adress = addressText.getText().toString();
                             String mobilenumber = mobilenumberText.getText().toString();
+
+                            System.out.println(bloodItem);
 
 
                             HashMap<Object, String> hashMap = new HashMap<>();
-
                             hashMap.put("email", email);
                             hashMap.put("uid", uid);
                             hashMap.put("name",name);
-                            hashMap.put("address",adress);
-                            hashMap.put("bloodtype","");
+                            hashMap.put("address",addressItem);
+                            hashMap.put("bloodtype",bloodItem);
                             hashMap.put("mobilenumber",mobilenumber);
 
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -157,7 +212,6 @@ public class SignupActivity extends AppCompatActivity {
         boolean valid = true;
 
         String name = nameText.getText().toString();
-        String address = addressText.getText().toString();
         String email = emailText.getText().toString();
         String mobile = mobilenumberText.getText().toString();
         String password = passwordText.getText().toString();
@@ -168,13 +222,6 @@ public class SignupActivity extends AppCompatActivity {
             valid = false;
         } else {
             nameText.setError(null);
-        }
-
-        if (address.isEmpty()) {
-            addressText.setError("Enter Valid Address");
-            valid = false;
-        } else {
-            addressText.setError(null);
         }
 
 

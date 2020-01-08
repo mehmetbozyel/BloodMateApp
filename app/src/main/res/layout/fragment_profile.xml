@@ -52,7 +52,7 @@
             app:layout_constraintTop_toBottomOf="@+id/email" />
 
         <EditText
-            android:id="@+id/bloodtype"
+            android:id="@+id/bloodtypetxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -104,6 +104,6 @@
             android:text="Voluntary Status"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bloodtype" />
+            app:layout_constraintTop_toBottomOf="@+id/bloodtypetxt" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
