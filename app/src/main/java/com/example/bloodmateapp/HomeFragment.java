@@ -78,6 +78,8 @@ public class HomeFragment extends Fragment {
     private void loadPosts() {
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
+        ref.keepSynced(true);
+
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
