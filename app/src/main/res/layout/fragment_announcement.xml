@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="25dp"
-                android:background="@drawable/radius"
+                android:background="@drawable/customborder"
                 android:padding="15dp"
                 android:text="@string/info"
                 android:textColor="@android:color/white"

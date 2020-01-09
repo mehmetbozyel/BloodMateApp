@@ -134,7 +134,7 @@ public class AnnouncementFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("Select Blood Type")){
-                    Toast.makeText(parent.getContext(),"Please select blood type", LENGTH_SHORT).show();
+                    //Toast.makeText(parent.getContext(),"Please select blood type", LENGTH_SHORT).show();
                 }
                 else {
                     bloodItem = parent.getItemAtPosition(position).toString();
@@ -151,7 +151,7 @@ public class AnnouncementFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("Select City")){
-                    Toast.makeText(parent.getContext(),"Please select a city", LENGTH_SHORT).show();
+                    //Toast.makeText(parent.getContext(),"Please select a city", LENGTH_SHORT).show();
                 }
                 else {
                     cityItem = parent.getItemAtPosition(position).toString();
@@ -168,7 +168,7 @@ public class AnnouncementFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("Select Hospital Name")){
-                    Toast.makeText(parent.getContext(),"Please select a hospital", LENGTH_SHORT).show();
+                    //Toast.makeText(parent.getContext(),"Please select a hospital", LENGTH_SHORT).show();
                 }
                 else {
                     hospitalItem = parent.getItemAtPosition(position).toString();
@@ -228,7 +228,6 @@ public class AnnouncementFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-
                                 //Toast toast = Toast.makeText(AnnouncementFragment.this,"Post Published", LENGTH_SHORT);
                                 nametxt.setText("");
                                 detailstxt.setText("");
@@ -248,6 +247,7 @@ public class AnnouncementFragment extends Fragment {
 
             }
         });
+
         // Inflate the layout for this fragment
         return view;
     }

@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="15dp"
-    android:background="@color/primary_darker"
     android:padding="15dp"
+    android:background="@drawable/customborder"
     tools:context=".PostRowActivity">
 
     <TextView
@@ -57,6 +57,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
+        android:clickable="true"
         android:gravity="start"
         android:text="PhoneNumber"
         android:textSize="18sp"

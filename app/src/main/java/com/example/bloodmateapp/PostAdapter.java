@@ -1,6 +1,10 @@
 package com.example.bloodmateapp;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
@@ -49,10 +55,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         myHolder.nameSurname.setText("Patient: " + name);
         myHolder.city.setText("City: " + city);
         myHolder.hospital.setText("Hospital: " + hospital);
-        myHolder.details.setText("Details"+ "\n" + details);
+        myHolder.details.setText("Details: " + "\n" + details);
         myHolder.time.setText(time);
         myHolder.phoneNumber.setText("Phone Number: " + phoneNum);
         myHolder.userName.setText("Shared by " + username);
+
     }
 
     @Override
@@ -60,7 +67,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         return postList.size();
     }
 
-    class  MyHolder extends RecyclerView.ViewHolder{
+    class MyHolder extends RecyclerView.ViewHolder {
 
         TextView bloodType, nameSurname, city, hospital, phoneNumber, time, details, userName;
 
@@ -77,6 +84,40 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             details = itemView.findViewById(R.id.txt);
             userName = itemView.findViewById(R.id.userShared);
 
+
+            phoneNumber.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println(phoneNumber.getText().toString().substring(14));
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                    callIntent.setData(Uri.parse("tel:" + phoneNumber.getText().toString().substring(14)));
+                    context.startActivity(callIntent);
+
+                }
+            });
+
+            hospital.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + city.getText().toString().substring(6) + hospital.getText().toString().substring(9));
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    context.startActivity(mapIntent);
+                }
+            });
+
+            city.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + city.getText().toString().substring(6) + hospital.getText().toString().substring(9));
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    context.startActivity(mapIntent);
+                }
+            });
+
         }
     }
+
+
 }
